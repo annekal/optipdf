@@ -4,101 +4,76 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OptiPDF — Fast, private PDF tools</title>
-  <!-- Optional: keep your external stylesheet if you have one -->
-  <link rel="stylesheet" href="./css/styles.css">
 
-  <!-- Strong, self‑contained UI styles that override older CSS -->
+  <!-- One-file, mobile-first, clean reset. No tiles; each tool lives with its action. -->
   <style>
     :root{
-      --brand:#2563eb;           /* accessible blue */
-      --brand-700:#1d4ed8;
-      --bg:#f8fafc;             /* subtle background */
-      --text:#111827;           /* near-black text for contrast */
-      --muted:#6b7280;          /* gray text */
-      --card:#ffffff;           /* white cards */
-      --border:#e5e7eb;         /* light border */
-      --focus-ring:#93c5fd;     /* focus outline */
+      --bg:#f3f4f6;        /* soft gray background */
+      --card:#ffffff;      /* white cards */
+      --border:#e5e7eb;    /* light border */
+      --text:#111827;      /* near-black text */
+      --muted:#374151;     /* darker gray body */
+      --brand:#2563eb;     /* accessible blue */
+      --brand-700:#1d4ed8; /* darker hover blue */
     }
-
-    /* Reset / base */
+    /* base */
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{margin:0; color:var(--text); background:var(--bg); font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
-    img{max-width:100%; display:block}
-    a{color:inherit}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    img{max-width:100%;display:block}
 
-    /* Layout helpers */
-    .container{max-width:1100px; margin:0 auto; padding:16px}
-    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 
-    /* Header */
-    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border)}
-    .header-row{display:flex; align-items:center; gap:12px}
-    .brand-left{display:flex; align-items:center; gap:10px}
+    /* header */
+    header{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--border)}
+    .header{display:flex;align-items:center;gap:12px}
+    .brand-left{display:flex;align-items:center;gap:10px}
     .logo{height:18px}
-    .brand{font-weight:800; font-size:1.08rem; letter-spacing:.2px}
-    nav.nav{margin-left:auto; display:flex; align-items:center; gap:16px; white-space:nowrap}
-    nav.nav a{display:inline-block; text-decoration:none; color:#374151}
+    .brand{font-weight:800;font-size:1.08rem}
+    nav.nav{margin-left:auto;display:flex;gap:14px;white-space:nowrap}
+    nav.nav a{color:#374151;text-decoration:none;font-weight:600}
     nav.nav a:hover{color:var(--brand)}
+    @media (min-width:1000px){ .logo{height:20px} .brand{font-size:1.24rem} }
+    @media (max-width:560px){ header{padding:8px 12px} }
 
-    /* Hero */
-    .hero{padding:20px 0}
-    .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:18px; align-items:center}
-    .hero h1{margin:0 0 6px; font-size:1.6rem; line-height:1.2}
-    .hero p{margin:.25rem 0 1rem; color:var(--muted)}
-    .btn{display:inline-flex; align-items:center; justify-content:center; gap:.5rem; font-weight:700; border-radius:12px; border:1px solid transparent; padding:12px 16px; cursor:pointer; transition:box-shadow .08s ease, transform .06s ease}
+    /* hero */
+    .hero{padding:16px 0}
+    .hero-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:center}
+    .hero h1{margin:0 0 6px;font-size:1.5rem;line-height:1.2}
+    .hero p{margin:.25rem 0 1rem;color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:12px;border:1px solid transparent;padding:12px 16px;cursor:pointer;transition:box-shadow .08s ease,transform .06s ease}
     .btn:active{transform:translateY(1px)}
-    .btn-primary{background:var(--brand); color:#fff}
+    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
     .btn-primary:hover{background:var(--brand-700)}
-    .btn-secondary{background:#fff; color:var(--brand); border-color:var(--brand)}
+    .btn-secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
     .btn-secondary:hover{background:#eef2ff}
-    .note{font-size:.92rem; color:var(--muted)}
+    .note{font-size:.92rem;color:var(--muted)}
+    .hero-media video{width:100%;border-radius:14px;background:#000;border:1px solid var(--border)}
+    /* side-by-side on wide screens */
+    @media (min-width:960px){ .hero-grid{grid-template-columns:1fr 1fr} }
 
-    .hero-media video, .hero-media iframe{width:100%; border-radius:14px; background:#000; border:1px solid var(--border)}
+    /* tools (accordion cards) */
+    .tool{background:var(--card);border:1px solid var(--border);border-radius:16px;margin:14px 0;overflow:hidden}
+    .tool>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:800;display:flex;align-items:center;justify-content:space-between}
+    .tool>summary::-webkit-details-marker{display:none}
+    .tool>summary span{color:var(--muted);font-weight:600;font-size:.95rem}
+    .tool .content{padding:0 16px 16px}
 
-    /* Tiles */
-    .tiles{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:14px; margin-top:16px}
-    .tile{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; font-weight:700; text-decoration:none}
-    .tile:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
-    .tile small{display:block; margin-top:4px; color:var(--muted); font-weight:600}
+    input[type="text"],input[type="number"],select{padding:10px 12px;border:1px solid var(--border);border-radius:10px;min-width:140px;background:#fff}
 
-    /* Tool cards */
-    .tool-card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; margin:22px auto}
-    .tool-card h2{margin:.1rem 0 .6rem; font-size:1.25rem}
-    .stack{display:flex; gap:10px; flex-wrap:wrap}
+    /* footer */
+    footer{margin:22px 0 40px;text-align:center;color:#6b7280}
 
-    /* Footer */
-    footer{margin:28px 0 40px; text-align:center; color:#6b7280}
-
-    /* Responsive */
-    @media (max-width:1000px){
-      .hero-grid{grid-template-columns:1fr}
-      /* Put media BEFORE the button column on phones */
-      .hero-media{order:-1}
-      nav.nav{gap:12px}
-    }
-    @media (max-width:640px){
-      .logo{height:16px}
-      .brand{font-size:1.06rem}
-      .tiles{grid-template-columns:repeat(2, minmax(0,1fr))}
-    }
-    @media (max-width:440px){
-      .tiles{grid-template-columns:1fr}
-    }
-
-    /* Strong overrides to beat any older CSS */
-    header, .header-row, .brand-left, nav.nav, .tiles, .tool-card, .hero-grid{all:initial; all:revert-layer;}
-    /* Re-apply our rules after reset (ensures this sheet wins) */
-    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border)}
-    .header-row{display:flex; align-items:center; gap:12px}
-    .brand-left{display:flex; align-items:center; gap:10px}
-    nav.nav{margin-left:auto; display:flex; align-items:center; gap:16px; white-space:nowrap}
+    /* safety: if old UI leaked below footer, hide it */
+    footer ~ *{display:none !important}
   </style>
 </head>
 <body>
   <header>
-    <div class="container header-row">
+    <div class="container header">
       <div class="brand-left">
+        <!-- Change src to your real logo path if needed -->
         <img src="icons/icon-192.png" alt="OptiPDF logo" class="logo">
         <div class="brand">OptiPDF</div>
       </div>
@@ -107,154 +82,202 @@
         <a href="#split">Split</a>
         <a href="#rotate">Rotate</a>
         <a href="#reorder">Reorder</a>
-        <a href="#tools">All tools</a>
+        <a href="#view">View</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
+    <!-- HERO: CTA + Video; stacks on phones, side-by-side on desktop -->
     <section class="hero">
       <div class="container hero-grid">
-        <div class="hero-media">
-          <!-- Replace src with your actual video file (optional). Poster is optional too. -->
-          <video controls preload="metadata" poster="assets/cover.jpg">
-            <source src="assets/intro.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
         <div class="hero-cta">
           <h1>Fast, private PDF tools</h1>
           <p>Everything runs in your browser. Nothing is uploaded.</p>
           <button id="openPdfBtn" class="btn btn-primary">Choose PDF</button>
-          <span class="note">or pick a tool below</span>
           <input type="file" id="pdfInput" accept="application/pdf" hidden>
+          <div class="note">Or pick a tool below.</div>
+        </div>
+        <div class="hero-media">
+          <!-- Optional video (change path to your video if you have one) -->
+          <video controls preload="metadata" poster="assets/cover.jpg">
+            <source src="assets/intro.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
     </section>
 
-    <!-- QUICK TOOLS -->
-    <section id="tools" class="container" aria-labelledby="tools-title">
-      <h2 id="tools-title" class="sr-only">Tools</h2>
-      <div class="tiles">
-        <a class="tile" href="#merge">Merge <small>Combine PDFs</small></a>
-        <a class="tile" href="#split">Split <small>Cut into parts</small></a>
-        <a class="tile" href="#reorder">Reorder <small>Drag page order</small></a>
-        <a class="tile" href="#rotate">Rotate <small>90° steps</small></a>
-        <a class="tile" href="#pagenum">Page # <small>Number pages</small></a>
-        <a class="tile" href="#watermark">Watermark <small>Text overlay</small></a>
-        <a class="tile" href="#metadata">Metadata <small>Edit fields</small></a>
-        <a class="tile" href="#view">View <small>Preview pages</small></a>
+    <!-- MERGE -->
+    <details id="merge" class="container tool" open>
+      <summary>Merge PDFs <span>Combine multiple files</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="merge" data-multiple="true">Select PDFs</button>
+          <button class="btn btn-primary run" data-tool="merge" disabled>Merge (stub)</button>
+        </div>
       </div>
-    </section>
-
-    <!-- MERGE (example stub) -->
-    <section id="merge" class="container tool-card" aria-labelledby="merge-title">
-      <h2 id="merge-title">Merge PDFs</h2>
-      <p class="note">Select multiple PDFs, then we’ll combine them into one file.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="merge">Select PDFs</button>
-        <button class="btn btn-primary run" data-tool="merge">Merge (stub)</button>
-      </div>
-    </section>
+    </details>
 
     <!-- SPLIT -->
-    <section id="split" class="container tool-card" aria-labelledby="split-title">
-      <h2 id="split-title">Split PDF</h2>
-      <p class="note">Choose a file, then pick ranges (e.g., 1-3, 4, 7-9). Coming next.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="split">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="split">Split (stub)</button>
+    <details id="split" class="container tool">
+      <summary>Split PDF <span>Cut into ranges</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="split">Choose PDF</button>
+          <input type="text" id="ranges" placeholder="Ranges e.g. 1-3,5,7-9">
+          <button class="btn btn-primary run" data-tool="split" disabled>Split (stub)</button>
+        </div>
       </div>
-    </section>
+    </details>
 
     <!-- REORDER -->
-    <section id="reorder" class="container tool-card" aria-labelledby="reorder-title">
-      <h2 id="reorder-title">Reorder pages</h2>
-      <p class="note">Drag pages to rearrange. Stub for now.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="reorder">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="reorder">Open Reorder (stub)</button>
+    <details id="reorder" class="container tool">
+      <summary>Reorder pages <span>Drag to rearrange</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="reorder">Choose PDF</button>
+          <button class="btn btn-primary run" data-tool="reorder" disabled>Open Reorder (stub)</button>
+        </div>
       </div>
-    </section>
+    </details>
 
     <!-- ROTATE -->
-    <section id="rotate" class="container tool-card" aria-labelledby="rotate-title">
-      <h2 id="rotate-title">Rotate pages</h2>
-      <p class="note">Rotate selected pages 90°/180°/270°. Stub for now.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="rotate">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="rotate">Rotate (stub)</button>
+    <details id="rotate" class="container tool">
+      <summary>Rotate pages <span>90°/180°/270°</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="rotate">Choose PDF</button>
+          <select id="deg">
+            <option value="90">90°</option>
+            <option value="180">180°</option>
+            <option value="270">270°</option>
+          </select>
+          <button class="btn btn-primary run" data-tool="rotate" disabled>Rotate (stub)</button>
+        </div>
       </div>
-    </section>
+    </details>
 
     <!-- PAGE NUMBERS -->
-    <section id="pagenum" class="container tool-card" aria-labelledby="pagenum-title">
-      <h2 id="pagenum-title">Page numbers</h2>
-      <p class="note">Add numbers bottom-center. Stub for now.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="pagenum">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="pagenum">Add numbers (stub)</button>
+    <details id="pagenum" class="container tool">
+      <summary>Page numbers <span>Bottom center</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="pagenum">Choose PDF</button>
+          <select id="pos">
+            <option value="bottom-center">Bottom-center</option>
+            <option value="bottom-right">Bottom-right</option>
+            <option value="top-right">Top-right</option>
+          </select>
+          <button class="btn btn-primary run" data-tool="pagenum" disabled>Add numbers (stub)</button>
+        </div>
       </div>
-    </section>
+    </details>
 
     <!-- WATERMARK -->
-    <section id="watermark" class="container tool-card" aria-labelledby="watermark-title">
-      <h2 id="watermark-title">Text watermark</h2>
-      <p class="note">Overlay text with opacity/position. Stub for now.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="watermark">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="watermark">Apply watermark (stub)</button>
+    <details id="watermark" class="container tool">
+      <summary>Text watermark <span>Overlay text</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="watermark">Choose PDF</button>
+          <input type="text" id="wmtext" placeholder="Watermark text">
+          <input type="number" id="opacity" min="10" max="100" value="40" style="width:110px" title="Opacity %">
+          <button class="btn btn-primary run" data-tool="watermark" disabled>Apply (stub)</button>
+        </div>
       </div>
-    </section>
+    </details>
 
     <!-- METADATA -->
-    <section id="metadata" class="container tool-card" aria-labelledby="metadata-title">
-      <h2 id="metadata-title">Metadata</h2>
-      <p class="note">Edit Title / Author / Subject. Stub for now.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="metadata">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="metadata">Save metadata (stub)</button>
+    <details id="metadata" class="container tool">
+      <summary>Metadata <span>Edit fields</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="metadata">Choose PDF</button>
+          <input type="text" id="title" placeholder="Title">
+          <input type="text" id="author" placeholder="Author">
+          <input type="text" id="subject" placeholder="Subject">
+          <button class="btn btn-primary run" data-tool="metadata" disabled>Save (stub)</button>
+        </div>
       </div>
-    </section>
+    </details>
 
     <!-- VIEW -->
-    <section id="view" class="container tool-card" aria-labelledby="view-title">
-      <h2 id="view-title">View PDF</h2>
-      <p class="note">Preview the first page. Viewer wiring coming next.</p>
-      <div class="stack">
-        <button class="btn btn-secondary pick" data-tool="view">Choose PDF</button>
-        <button class="btn btn-primary run" data-tool="view">Open viewer (stub)</button>
+    <details id="view" class="container tool">
+      <summary>View PDF <span>Preview first page</span></summary>
+      <div class="content">
+        <div class="row">
+          <button class="btn btn-secondary pick" data-tool="view">Choose PDF</button>
+        </div>
+        <div style="margin-top:10px">
+          <canvas id="pdfCanvas" style="width:100%;max-width:900px;border:1px solid var(--border);border-radius:12px;background:#fff"></canvas>
+        </div>
       </div>
-    </section>
+    </details>
 
   </main>
 
   <footer>
-    © 2025 OptiPDF — fast, private, in‑browser. Need help? <a href="mailto:parshasparksprintables@gmail.com?subject=OptiPDF%20Help">Email us</a>
+    © 2025 OptiPDF — fast, private, in‑browser.
   </footer>
 
-  <!-- Minimal JS to make buttons work today (no PDF logic yet) -->
+  <!-- PDF.js CDN for the View tool only -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";</script>
+
+  <!-- Minimal JS: file picking + enable RUN + basic viewer (page 1) -->
   <script>
     const input = document.getElementById('pdfInput');
+    const openBtn = document.getElementById('openPdfBtn');
     const pickButtons = document.querySelectorAll('.pick');
     const runButtons  = document.querySelectorAll('.run');
-    const openBtn     = document.getElementById('openPdfBtn');
 
-    openBtn?.addEventListener('click', ()=> input?.click());
-    pickButtons.forEach(btn=> btn.addEventListener('click', ()=> input?.click()));
+    let currentTool = null;
 
-    runButtons.forEach(btn=> btn.addEventListener('click', ()=>{
-      const tool = btn.getAttribute('data-tool');
-      alert(`${tool.toUpperCase()} — action wiring comes next. Files stay on your device.`);
-    }));
+    // From hero button
+    openBtn?.addEventListener('click', () => { currentTool = 'view'; input.multiple = false; input.click(); });
 
-    input?.addEventListener('change', (e)=>{
-      const files = Array.from(e.target.files||[]);
-      if(!files.length) return;
-      // Hook your real tool here — for now we just confirm selection
-      alert(`${files.length} file(s) selected. Viewer/merge logic coming next.`);
+    // From each tool card
+    pickButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentTool = btn.dataset.tool;
+        input.multiple = btn.dataset.multiple === 'true';
+        input.click();
+      });
     });
+
+    function enableRunFor(tool){
+      document.querySelectorAll('.run[data-tool]').forEach(b => {
+        b.disabled = (b.dataset.tool !== tool);
+      });
+      document.getElementById(tool)?.setAttribute('open','open');
+    }
+
+    async function renderFirstPage(file){
+      const canvas = document.getElementById('pdfCanvas');
+      if(!canvas || !file) return;
+      const ctx = canvas.getContext('2d');
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      const page = await pdf.getPage(1);
+      const scale = 1.5;
+      const viewport = page.getViewport({ scale });
+      canvas.width = viewport.width; canvas.height = viewport.height;
+      await page.render({ canvasContext: ctx, viewport }).promise;
+    }
+
+    input?.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if(!files.length) return;
+      enableRunFor(currentTool || 'view');
+      if((currentTool || 'view') === 'view'){
+        await renderFirstPage(files[0]);
+        document.getElementById('view')?.scrollIntoView({behavior:'smooth'});
+      }
+    });
+
+    runButtons.forEach(btn => btn.addEventListener('click', () => {
+      const tool = btn.dataset.tool;
+      alert(`${tool.toUpperCase()} — wiring coming next. Files stay on your device.`);
+    }));
   </script>
 </body>
 </html>
