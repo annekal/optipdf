@@ -1,0 +1,30 @@
+:root { --brand:#ff7a1a; --bg:#fafafa; --text:#222; }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family: system-ui, Arial, sans-serif; }
+
+.container { max-width:1100px; margin:0 auto; padding:16px; }
+
+/* Header */
+.app-header { display:flex; align-items:center; justify-content:space-between; padding:8px 16px; background:#fff; border-bottom:1px solid #eee; }
+.app-header .logo { height:28px; }
+.app-header .brand { font-weight:800; letter-spacing:.2px; margin-left:8px; }
+.app-header .nav a { margin-left:16px; text-decoration:none; color:#333; }
+
+/* Hero */
+.hero { text-align:center; padding:28px 16px; }
+.hero h1 { margin:0 0 8px; font-size:1.6rem; }
+.cta { background:var(--brand); color:#fff; border:none; border-radius:12px; padding:14px 20px; font-weight:700; cursor:pointer; }
+
+/* Tiles */
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:16px; }
+.tile { border:1px solid #eee; border-radius:12px; padding:14px; font-weight:600; background:#fff; text-align:center; cursor:pointer; }
+.tile:active, .cta:active { transform: translateY(1px); }
+
+/* Footer */
+.footer { text-align:center; font-size:.9rem; color:#666; padding:20px 0 40px; }
+
+/* Mobile tweaks */
+@media (max-width:480px){
+  .app-header .logo { height:24px; }
+  .app-header .brand { font-size:1rem; }
+}
