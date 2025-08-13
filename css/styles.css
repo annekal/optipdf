@@ -28,3 +28,7 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-
   .app-header .logo { height:24px; }
   .app-header .brand { font-size:1rem; }
 }
+/* Force one column of tiles on smaller screens (optional) */
+@media (max-width: 1000px) {
+  .tiles { grid-template-columns: 1fr; }
+}
