@@ -1,460 +1,259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OptiPDF — Fast, private PDF tools</title>
+  <!-- Optional: keep your external stylesheet if you have one -->
   <link rel="stylesheet" href="./css/styles.css">
-  <title>OptiPDF — Lightweight PDF tools</title>
-  <meta name="description" content="OptiPDF — small, fast, and privacy-friendly PDF tools." />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icons/icon-192.png" />
+
+  <!-- Strong, self‑contained UI styles that override older CSS -->
   <style>
-:root {
-  --bg: #0e1220; --card: #11172c; --text: #f7fafc; --muted: #b8c2e0; --line: #293255;
-  --accent: #f59e0b; --accent-soft: rgba(245, 158, 11, 0.14);
-}
-* { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans'; color: var(--text);
-  background: radial-gradient(1200px 600px at 70% -10%, #1a2242 0%, var(--bg) 50%), var(--bg); }
-a { color: #ffd08a; }
-header { display:flex; align-items:center; justify-content:space-between; padding: 14px 20px; max-width: 1200px; margin: 0 auto; }
-.brand { display:flex; gap:12px; align-items:center; text-decoration:none; color:inherit; }
-.brand img { width:150px; height:auto; }
-.brand .name { display:flex; flex-direction:column; line-height:1.0; }
-.brand .name strong { font-size: 26px; }
-.brand .name span { font-size:12px; color: var(--muted); }
-.navlinks { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.pill { font-size:12px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; color: var(--muted); text-decoration:none; background:transparent; }
-main { max-width:1200px; margin:28px auto; padding: 0 20px; }
-.hero { display:grid; gap: 24px; grid-template-columns: 1.2fr 1fr; align-items:flex-start; }
-.card { background: linear-gradient(180deg, var(--card), #0b1226); border: 1px solid var(--line); border-radius: 18px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
-h1 { font-size: clamp(24px, 3.2vw, 36px); margin:0 0 10px; line-height:1.15; }
-p { color: var(--muted); margin: 0 0 8px; }
-.cta { display:flex; gap:12px; flex-wrap: wrap; margin-top: 14px; }
-.btn { padding: 10px 14px; border-radius: 10px; border:1px solid var(--line); background: #151c3a; color: var(--text); text-decoration:none; font-weight:600; cursor:pointer; }
-.btn.primary { border-color: #ad6a07; background: linear-gradient(180deg, #2b1c08, #1a1309); color:#ffd79a; }
-.btn.ghost { background: transparent; }
-.grid { margin-top: 18px; display:grid; gap:12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.tile { padding:16px; border-radius:14px; border:1px solid var(--line); background:#0f1736; position:relative; }
-.tile:before { content:''; position:absolute; inset:auto auto 0 0; height:3px; width: 90px; background: var(--accent); border-radius:3px; opacity:.8; }
-.tile strong { color: #ffd08a; }
-.tools { margin-top:22px; display:grid; gap:14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.toolcard { padding:16px; border-radius:14px; border:1px solid var(--line); background:#101735; }
-label { display:block; margin:8px 0 4px; color: var(--muted); font-size: 13px; }
-input[type="text"], input[type="number"], input[type="file"], textarea, select {
-  width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:#0b1126; color:var(--text);
-}
-.viewer { width:100%; height: 520px; border:1px solid var(--line); border-radius: 12px; background:#0b1126; }
-small.hint { color:#9fb0d8; display:block; margin-top:6px; font-size:12px; }
-footer { max-width:1200px; margin:26px auto; padding: 0 20px 34px; color: var(--muted); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-.footer-right { display:flex; gap:10px; flex-wrap:wrap; }
-.meta-line { padding:6px 10px; border-radius:999px; border:1px dashed var(--line); background: var(--accent-soft); color:#ffd08a; font-size:12px; }
-.yt { position: relative; width: 100%; padding-top: 56.25%; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:#0b1126; }
-.yt iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
-@media (max-width: 1000px) { .hero { grid-template-columns: 1fr; } .tools { grid-template-columns: 1fr; } }
-</style>
+    :root{
+      --brand:#2563eb;           /* accessible blue */
+      --brand-700:#1d4ed8;
+      --bg:#f8fafc;             /* subtle background */
+      --text:#111827;           /* near-black text for contrast */
+      --muted:#6b7280;          /* gray text */
+      --card:#ffffff;           /* white cards */
+      --border:#e5e7eb;         /* light border */
+      --focus-ring:#93c5fd;     /* focus outline */
+    }
+
+    /* Reset / base */
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0; color:var(--text); background:var(--bg); font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+    img{max-width:100%; display:block}
+    a{color:inherit}
+
+    /* Layout helpers */
+    .container{max-width:1100px; margin:0 auto; padding:16px}
+    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border)}
+    .header-row{display:flex; align-items:center; gap:12px}
+    .brand-left{display:flex; align-items:center; gap:10px}
+    .logo{height:18px}
+    .brand{font-weight:800; font-size:1.08rem; letter-spacing:.2px}
+    nav.nav{margin-left:auto; display:flex; align-items:center; gap:16px; white-space:nowrap}
+    nav.nav a{display:inline-block; text-decoration:none; color:#374151}
+    nav.nav a:hover{color:var(--brand)}
+
+    /* Hero */
+    .hero{padding:20px 0}
+    .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:18px; align-items:center}
+    .hero h1{margin:0 0 6px; font-size:1.6rem; line-height:1.2}
+    .hero p{margin:.25rem 0 1rem; color:var(--muted)}
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:.5rem; font-weight:700; border-radius:12px; border:1px solid transparent; padding:12px 16px; cursor:pointer; transition:box-shadow .08s ease, transform .06s ease}
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{background:var(--brand); color:#fff}
+    .btn-primary:hover{background:var(--brand-700)}
+    .btn-secondary{background:#fff; color:var(--brand); border-color:var(--brand)}
+    .btn-secondary:hover{background:#eef2ff}
+    .note{font-size:.92rem; color:var(--muted)}
+
+    .hero-media video, .hero-media iframe{width:100%; border-radius:14px; background:#000; border:1px solid var(--border)}
+
+    /* Tiles */
+    .tiles{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:14px; margin-top:16px}
+    .tile{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; font-weight:700; text-decoration:none}
+    .tile:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+    .tile small{display:block; margin-top:4px; color:var(--muted); font-weight:600}
+
+    /* Tool cards */
+    .tool-card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; margin:22px auto}
+    .tool-card h2{margin:.1rem 0 .6rem; font-size:1.25rem}
+    .stack{display:flex; gap:10px; flex-wrap:wrap}
+
+    /* Footer */
+    footer{margin:28px 0 40px; text-align:center; color:#6b7280}
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .hero-grid{grid-template-columns:1fr}
+      /* Put media BEFORE the button column on phones */
+      .hero-media{order:-1}
+      nav.nav{gap:12px}
+    }
+    @media (max-width:640px){
+      .logo{height:16px}
+      .brand{font-size:1.06rem}
+      .tiles{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+    @media (max-width:440px){
+      .tiles{grid-template-columns:1fr}
+    }
+
+    /* Strong overrides to beat any older CSS */
+    header, .header-row, .brand-left, nav.nav, .tiles, .tool-card, .hero-grid{all:initial; all:revert-layer;}
+    /* Re-apply our rules after reset (ensures this sheet wins) */
+    header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border)}
+    .header-row{display:flex; align-items:center; gap:12px}
+    .brand-left{display:flex; align-items:center; gap:10px}
+    nav.nav{margin-left:auto; display:flex; align-items:center; gap:16px; white-space:nowrap}
+  </style>
 </head>
 <body>
   <header>
-    <a class="brand" href="index.html" title="Home">
-      <img src="assets/logo.png" alt="Your Logo" onerror="this.src='icons/icon-192.png'">
-      <div class="name">
-        <strong>OptiPDF</strong>
-        <span>Fast • Private • Free</span>
+    <div class="container header-row">
+      <div class="brand-left">
+        <img src="icons/icon-192.png" alt="OptiPDF logo" class="logo">
+        <div class="brand">OptiPDF</div>
       </div>
-    </a>
-    <div class="navlinks">
-      <a class="pill" href="index.html">Home</a>
-      <a class="pill" href="lawyers.html">For Lawyers</a>
-      <a class="pill" href="about.html">About / Help</a>
-      <a class="pill" href="privacy.html">Privacy</a>
-      <a class="pill" href="about.html#version">v4.6</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#merge">Merge</a>
+        <a href="#split">Split</a>
+        <a href="#rotate">Rotate</a>
+        <a href="#reorder">Reorder</a>
+        <a href="#tools">All tools</a>
+      </nav>
     </div>
   </header>
 
   <main>
+    <!-- HERO -->
     <section class="hero">
-      <div class="card">
-        <h1>Lightweight PDF tools — fast, private, free</h1>
-        <p>Work with PDFs in your browser. Your files stay on your device.</p>
-
-        <div class="cta">
-          <label><strong>Open a PDF</strong> (View, Watermark, Page #, Rotate, Reorder, Metadata, Export)</label>
-          <input type="file" id="openPdf" accept="application/pdf" />
+      <div class="container hero-grid">
+        <div class="hero-media">
+          <!-- Replace src with your actual video file (optional). Poster is optional too. -->
+          <video controls preload="metadata" poster="assets/cover.jpg">
+            <source src="assets/intro.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
-
-        <div class="cta">
-          <a class="btn" id="mailtoBtn" href="mailto:parshasparksprintables@gmail.com?subject=OptiPDF%20Contact" rel="noopener">Email app</a>
-          <a class="btn ghost" id="gmailBtn" href="https://mail.google.com/mail/?view=cm&fs=1&to=parshasparksprintables@gmail.com&su=OptiPDF%20Contact" target="_blank" rel="noopener">Gmail web</a>
-          <button class="btn ghost" id="copyEmail" title="Copies the address to your clipboard">Copy email</button>
+        <div class="hero-cta">
+          <h1>Fast, private PDF tools</h1>
+          <p>Everything runs in your browser. Nothing is uploaded.</p>
+          <button id="openPdfBtn" class="btn btn-primary">Choose PDF</button>
+          <span class="note">or pick a tool below</span>
+          <input type="file" id="pdfInput" accept="application/pdf" hidden>
         </div>
-        <small class="hint">Email app = your computer’s mail program. Gmail web = opens Gmail compose in your browser. Copy email = puts the address on your clipboard.</small>
-      </div>
-
-      <div class="card">
-        <h3>Demo video (optional)</h3>
-        <div class="yt">
-          <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="OptiPDF demo" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-        <small class="hint">Replace VIDEO_ID with your YouTube video ID.</small>
       </div>
     </section>
 
-    <section>
-      <h3>Quick tiles</h3>
-      <p class="hint">Short explanations of each tool. The actual controls are in the <strong>Tools</strong> section below.</p>
-      <div class="grid">
-        <div class="tile"><strong>View</strong><br/>Open a PDF above to view it.</div>
-        <div class="tile"><strong>Merge</strong><br/>Combine multiple PDFs into one.</div>
-        <div class="tile"><strong>Split</strong><br/>Split pages into new PDFs.</div>
-        <div class="tile"><strong>Reorder</strong><br/>Change page order (simple list).</div>
-        <div class="tile"><strong>Rotate</strong><br/>Rotate pages by 90° steps.</div>
-        <div class="tile"><strong>Compress</strong><br/><em>Coming soon (image downscale).</em></div>
-        <div class="tile"><strong>Signature</strong><br/>Place a PNG signature on pages.</div>
-        <div class="tile"><strong>Metadata</strong><br/>Edit Title / Author / Subject.</div>
-        <div class="tile"><strong>Page #</strong><br/>Add page numbers bottom‑center.</div>
-        <div class="tile"><strong>WM Watermark</strong><br/>Add a faint text watermark.</div>
-        <div class="tile"><strong>Images → PDF</strong><br/>Make a PDF from images.</div>
-        <div class="tile"><strong>Export</strong><br/>Download the current PDF.</div>
+    <!-- QUICK TOOLS -->
+    <section id="tools" class="container" aria-labelledby="tools-title">
+      <h2 id="tools-title" class="sr-only">Tools</h2>
+      <div class="tiles">
+        <a class="tile" href="#merge">Merge <small>Combine PDFs</small></a>
+        <a class="tile" href="#split">Split <small>Cut into parts</small></a>
+        <a class="tile" href="#reorder">Reorder <small>Drag page order</small></a>
+        <a class="tile" href="#rotate">Rotate <small>90° steps</small></a>
+        <a class="tile" href="#pagenum">Page # <small>Number pages</small></a>
+        <a class="tile" href="#watermark">Watermark <small>Text overlay</small></a>
+        <a class="tile" href="#metadata">Metadata <small>Edit fields</small></a>
+        <a class="tile" href="#view">View <small>Preview pages</small></a>
       </div>
     </section>
 
-    <section class="tools">
-      <div class="toolcard">
-        <h3>Merge PDFs</h3>
-        <label>Select PDFs to merge</label>
-        <input type="file" id="mergeFiles" accept="application/pdf" multiple />
-        <button class="btn" id="mergeBtn">Merge → Current</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Split pages</h3>
-        <label>Ranges (e.g., 1-3,7,9-10)</label>
-        <input type="text" id="splitRanges" placeholder="1-3,7,9-10" />
-        <button class="btn" id="splitBtn">Split → Downloads</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Reorder pages</h3>
-        <label>New order (e.g., 3,1,2,...)</label>
-        <input type="text" id="orderInput" placeholder="e.g., 3,1,2" />
-        <button class="btn" id="reorderBtn">Apply order</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Rotate pages</h3>
-        <label>Rotate (degrees)</label>
-        <select id="rotateDeg">
-          <option value="90">90°</option>
-          <option value="180">180°</option>
-          <option value="270">270°</option>
-        </select>
-        <label>Pages (e.g., 1-2,5 or leave blank for all)</label>
-        <input type="text" id="rotatePages" placeholder="All pages if empty" />
-        <button class="btn" id="rotateBtn">Rotate</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Page numbers</h3>
-        <label>Format</label>
-        <select id="pnFormat">
-          <option value="x-of-n">Page X of N</option>
-          <option value="x">Page X</option>
-          <option value="number">X</option>
-        </select>
-        <label>Start at</label>
-        <input type="number" id="pnStart" value="1" />
-        <button class="btn" id="pnBtn">Add page numbers</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Watermark (text)</h3>
-        <label>Watermark text</label>
-        <input type="text" id="wmText" placeholder="CONFIDENTIAL" />
-        <label>Opacity (0.0–1.0)</label>
-        <input type="number" id="wmOpacity" value="0.15" step="0.05" min="0" max="1" />
-        <button class="btn" id="wmBtn">Apply watermark</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Signature (PNG)</h3>
-        <label>Upload signature image (PNG).</label>
-        <input type="file" id="sigFile" accept="image/png" />
-        <label>Pages (e.g., 1-2,5 or blank for all)</label>
-        <input type="text" id="sigPages" placeholder="All pages if empty" />
-        <button class="btn" id="sigBtn">Place signature</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Metadata</h3>
-        <label>Title</label><input type="text" id="mdTitle" placeholder="Document title" />
-        <label>Author</label><input type="text" id="mdAuthor" placeholder="Author" />
-        <label>Subject</label><input type="text" id="mdSubject" placeholder="Subject" />
-        <button class="btn" id="mdBtn">Apply metadata</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Images → PDF</h3>
-        <label>Select images (JPG/PNG)</label>
-        <input type="file" id="imgFiles" accept="image/png,image/jpeg" multiple />
-        <button class="btn" id="imgToPdfBtn">Create PDF from images</button>
-      </div>
-
-      <div class="toolcard">
-        <h3>Export</h3>
-        <button class="btn primary" id="downloadBtn">Download current PDF</button>
+    <!-- MERGE (example stub) -->
+    <section id="merge" class="container tool-card" aria-labelledby="merge-title">
+      <h2 id="merge-title">Merge PDFs</h2>
+      <p class="note">Select multiple PDFs, then we’ll combine them into one file.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="merge">Select PDFs</button>
+        <button class="btn btn-primary run" data-tool="merge">Merge (stub)</button>
       </div>
     </section>
 
-    <section class="card" style="margin-top:20px">
-      <object id="viewer" class="viewer" type="application/pdf" data=""></object>
-      <small class="hint">Viewer uses your browser’s PDF renderer.</small>
+    <!-- SPLIT -->
+    <section id="split" class="container tool-card" aria-labelledby="split-title">
+      <h2 id="split-title">Split PDF</h2>
+      <p class="note">Choose a file, then pick ranges (e.g., 1-3, 4, 7-9). Coming next.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="split">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="split">Split (stub)</button>
+      </div>
     </section>
+
+    <!-- REORDER -->
+    <section id="reorder" class="container tool-card" aria-labelledby="reorder-title">
+      <h2 id="reorder-title">Reorder pages</h2>
+      <p class="note">Drag pages to rearrange. Stub for now.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="reorder">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="reorder">Open Reorder (stub)</button>
+      </div>
+    </section>
+
+    <!-- ROTATE -->
+    <section id="rotate" class="container tool-card" aria-labelledby="rotate-title">
+      <h2 id="rotate-title">Rotate pages</h2>
+      <p class="note">Rotate selected pages 90°/180°/270°. Stub for now.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="rotate">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="rotate">Rotate (stub)</button>
+      </div>
+    </section>
+
+    <!-- PAGE NUMBERS -->
+    <section id="pagenum" class="container tool-card" aria-labelledby="pagenum-title">
+      <h2 id="pagenum-title">Page numbers</h2>
+      <p class="note">Add numbers bottom-center. Stub for now.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="pagenum">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="pagenum">Add numbers (stub)</button>
+      </div>
+    </section>
+
+    <!-- WATERMARK -->
+    <section id="watermark" class="container tool-card" aria-labelledby="watermark-title">
+      <h2 id="watermark-title">Text watermark</h2>
+      <p class="note">Overlay text with opacity/position. Stub for now.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="watermark">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="watermark">Apply watermark (stub)</button>
+      </div>
+    </section>
+
+    <!-- METADATA -->
+    <section id="metadata" class="container tool-card" aria-labelledby="metadata-title">
+      <h2 id="metadata-title">Metadata</h2>
+      <p class="note">Edit Title / Author / Subject. Stub for now.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="metadata">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="metadata">Save metadata (stub)</button>
+      </div>
+    </section>
+
+    <!-- VIEW -->
+    <section id="view" class="container tool-card" aria-labelledby="view-title">
+      <h2 id="view-title">View PDF</h2>
+      <p class="note">Preview the first page. Viewer wiring coming next.</p>
+      <div class="stack">
+        <button class="btn btn-secondary pick" data-tool="view">Choose PDF</button>
+        <button class="btn btn-primary run" data-tool="view">Open viewer (stub)</button>
+      </div>
+    </section>
+
   </main>
 
   <footer>
-    <div>© <span id="year"></span> OptiPDF. All rights reserved.</div>
-    <div class="footer-right">
-      <span class="meta-line">Metadata: Title • Author • Subject — editable</span>
-      <a class="pill" href="about.html#version">v4.6 details</a>
-      <a class="pill" href="privacy.html">Privacy</a>
-    </div>
+    © 2025 OptiPDF — fast, private, in‑browser. Need help? <a href="mailto:parshasparksprintables@gmail.com?subject=OptiPDF%20Help">Email us</a>
   </footer>
 
+  <!-- Minimal JS to make buttons work today (no PDF logic yet) -->
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    let PDFLibReady = false;
-    async function ensurePdfLib() {
-      if (PDFLibReady) return;
-      await new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js';
-        s.onload = () => resolve();
-        s.onerror = () => reject(new Error('Failed to load pdf-lib'));
-        document.head.appendChild(s);
-      });
-      PDFLibReady = true;
-    }
-    let currentDoc = null; let currentBytes = null; let currentURL = ''; let pendingAction = null;
-    function setViewer(bytes) {
-      const blob = new Blob([bytes], {type: 'application/pdf'});
-      if (currentURL) URL.revokeObjectURL(currentURL);
-      currentURL = URL.createObjectURL(blob);
-      document.getElementById('viewer').data = currentURL;
-    }
-    async function loadBytes(file) { return new Uint8Array(await file.arrayBuffer()); }
-    function requireDoc(actionFn) {
-      if (currentDoc) return actionFn();
-      pendingAction = actionFn;
-      document.getElementById('openPdf').click();
-      alert('Choose a PDF first, then your action will run.');
-    }
-    document.getElementById('openPdf').addEventListener('change', async (e) => {
-      const f = e.target.files && e.target.files[0]; if (!f) return;
-      try {
-        await ensurePdfLib();
-        currentBytes = await loadBytes(f);
-        currentDoc = await PDFLib.PDFDocument.load(currentBytes);
-        setViewer(currentBytes);
-        if (pendingAction) { const act = pendingAction; pendingAction = null; act(); }
-      } catch (err) { alert('Open failed: ' + err.message); }
-    });
-    function parseRanges(text, max) {
-      if (!text) return Array.from({length:max}, (_,i)=>i+1);
-      const out = new Set();
-      for (const part of text.split(',')) {
-        const p = part.trim(); if (!p) continue;
-        if (p.includes('-')) {
-          const [a,b] = p.split('-').map(n => parseInt(n,10));
-          const start = Math.min(a,b), end = Math.max(a,b);
-          for (let i = start; i <= end; i++) out.add(i);
-        } else {
-          const n = parseInt(p,10); if (!isNaN(n)) out.add(n);
-        }
-      }
-      return Array.from(out).filter(n => n>=1 && n<=max).sort((a,b)=>a-b);
-    }
-    document.getElementById('mergeBtn').addEventListener('click', async () => {
-      const doMerge = async () => {
-        const input = document.getElementById('mergeFiles');
-        if (!input.files || input.files.length === 0) return alert('Choose PDFs to merge.');
-        await ensurePdfLib();
-        try {
-          let base = currentDoc || await PDFLib.PDFDocument.create();
-          for (const f of input.files) {
-            const bytes = await loadBytes(f);
-            const addDoc = await PDFLib.PDFDocument.load(bytes);
-            const pages = await base.copyPages(addDoc, addDoc.getPageIndices());
-            pages.forEach(p => base.addPage(p));
-          }
-          const outBytes = await base.save();
-          currentDoc = base; currentBytes = outBytes; setViewer(outBytes);
-        } catch (e) { alert('Merge failed: ' + e.message); }
-      };
-      doMerge();
-    });
-    document.getElementById('splitBtn').addEventListener('click', () => requireDoc(async () => {
-      await ensurePdfLib();
-      try {
-        const rangesText = document.getElementById('splitRanges').value.trim();
-        const max = currentDoc.getPageCount();
-        if (!rangesText) return alert('Enter ranges like 1-3,7,9-10');
-        const groups = rangesText.split(/\s*;\s*|\s*\|\s*/);
-        let idx = 1;
-        for (const g of groups) {
-          const pages = parseRanges(g, max).map(n => n-1);
-          if (pages.length === 0) continue;
-          const outDoc = await PDFLib.PDFDocument.create();
-          const copied = await outDoc.copyPages(currentDoc, pages);
-          copied.forEach(p => outDoc.addPage(p));
-          const outBytes = await outDoc.save();
-          const blob = new Blob([outBytes], {type:'application/pdf'});
-          const url = URL.createObjectURL(blob);
-          const a = Object.assign(document.createElement('a'), {href: url, download: `split_part_${idx++}.pdf`});
-          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-        }
-      } catch (e) { alert('Split failed: ' + e.message); }
+    const input = document.getElementById('pdfInput');
+    const pickButtons = document.querySelectorAll('.pick');
+    const runButtons  = document.querySelectorAll('.run');
+    const openBtn     = document.getElementById('openPdfBtn');
+
+    openBtn?.addEventListener('click', ()=> input?.click());
+    pickButtons.forEach(btn=> btn.addEventListener('click', ()=> input?.click()));
+
+    runButtons.forEach(btn=> btn.addEventListener('click', ()=>{
+      const tool = btn.getAttribute('data-tool');
+      alert(`${tool.toUpperCase()} — action wiring comes next. Files stay on your device.`);
     }));
-    document.getElementById('reorderBtn').addEventListener('click', () => requireDoc(async () => {
-      await ensurePdfLib();
-      try {
-        const text = document.getElementById('orderInput').value.trim();
-        if (!text) return alert('Enter order like 3,1,2');
-        const nums = text.split(',').map(s => parseInt(s.trim(),10)).filter(n => !isNaN(n));
-        const max = currentDoc.getPageCount();
-        if (nums.some(n => n<1 || n>max)) return alert('Numbers must be between 1 and ' + max);
-        const outDoc = await PDFLib.PDFDocument.create();
-        const copied = await outDoc.copyPages(currentDoc, nums.map(n=>n-1));
-        copied.forEach(p => outDoc.addPage(p));
-        const outBytes = await outDoc.save();
-        currentDoc = await PDFLib.PDFDocument.load(outBytes);
-        currentBytes = outBytes; setViewer(outBytes);
-      } catch (e) { alert('Reorder failed: ' + e.message); }
-    }));
-    document.getElementById('rotateBtn').addEventListener('click', () => requireDoc(async () => {
-      await ensurePdfLib();
-      try {
-        const deg = parseInt(document.getElementById('rotateDeg').value,10);
-        const pagesText = document.getElementById('rotatePages').value.trim();
-        const max = currentDoc.getPageCount();
-        const indices = parseRanges(pagesText, max).map(n=>n-1);
-        if (indices.length === 0) indices.push(...Array.from({length:max},(_,i)=>i));
-        indices.forEach(i => {
-          const p = currentDoc.getPage(i);
-          const cur = p.getRotation().angle;
-          p.setRotation(PDFLib.degrees(((cur||0)+deg)%360));
-        });
-        const outBytes = await currentDoc.save();
-        currentDoc = await PDFLib.PDFDocument.load(outBytes);
-        currentBytes = outBytes; setViewer(outBytes);
-      } catch (e) { alert('Rotate failed: ' + e.message); }
-    }));
-    document.getElementById('pnBtn').addEventListener('click', () => requireDoc(async () => {
-      await ensurePdfLib();
-      try {
-        const fmt = document.getElementById('pnFormat').value;
-        const start = parseInt(document.getElementById('pnStart').value || '1',10);
-        const helv = await currentDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-        const total = currentDoc.getPageCount();
-        currentDoc.getPages().forEach((page, idx) => {
-          const num = start + idx;
-          const text = fmt === 'x' ? `Page ${num}` : (fmt === 'number' ? String(num) : `Page ${num} of ${total}`);
-          const size = 9;
-          const { width } = page.getSize();
-          const tw = helv.widthOfTextAtSize(text, size);
-          const x = (width - tw)/2; const y = 18;
-          page.drawText(text, { x, y, size, font: helv, color: PDFLib.rgb(1,1,1), opacity: 0.8 });
-        });
-        const outBytes = await currentDoc.save();
-        currentDoc = await PDFLib.PDFDocument.load(outBytes);
-        currentBytes = outBytes; setViewer(outBytes);
-      } catch (e) { alert('Page numbers failed: ' + e.message); }
-    }));
-    document.getElementById('wmBtn').addEventListener('click', () => requireDoc(async () => {
-      await ensurePdfLib();
-      try {
-        const txt = document.getElementById('wmText').value || 'CONFIDENTIAL';
-        const op = Math.max(0, Math.min(1, parseFloat(document.getElementById('wmOpacity').value || '0.15')));
-        const helv = await currentDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-        currentDoc.getPages().forEach(page => {
-          const { width, height } = page.getSize();
-          const size = Math.min(width, height) * 0.1;
-          const tw = helv.widthOfTextAtSize(txt, size);
-          page.drawText(txt, {
-            x: (width - tw)/2,
-            y: height/2,
-            size,
-            font: helv,
-            color: PDFLib.rgb(1,1,1),
-            rotate: PDFLib.degrees(45),
-            opacity: op
-          });
-        });
-        const outBytes = await currentDoc.save();
-        currentDoc = await PDFLib.PDFDocument.load(outBytes);
-        currentBytes = outBytes; setViewer(outBytes);
-      } catch (e) { alert('Watermark failed: ' + e.message); }
-    }));
-    document.getElementById('sigBtn').addEventListener('click', () => requireDoc(async () => {
-      const f = document.getElementById('sigFile').files && document.getElementById('sigFile').files[0];
-      if (!f) return alert('Choose a PNG signature image');
-      await ensurePdfLib();
-      try {
-        const bytes = new Uint8Array(await f.arrayBuffer());
-        const png = await currentDoc.embedPng(bytes);
-        const pagesText = document.getElementById('sigPages').value.trim();
-        const max = currentDoc.getPageCount();
-        const indices = parseRanges(pagesText, max).map(n=>n-1);
-        if (indices.length === 0) indices.push(...Array.from({length:max},(_,i)=>i));
-        indices.forEach(i => {
-          const p = currentDoc.getPage(i);
-          const { width, height } = p.getSize();
-          const targetW = Math.min(150, width * 0.25);
-          const scale = targetW / png.width;
-          const targetH = png.height * scale;
-          const x = width - targetW - 36; const y = 36;
-          p.drawImage(png, { x, y, width: targetW, height: targetH, opacity: 0.95 });
-        });
-        const outBytes = await currentDoc.save();
-        currentDoc = await PDFLib.PDFDocument.load(outBytes);
-        currentBytes = outBytes; setViewer(outBytes);
-      } catch (e) { alert('Signature failed: ' + e.message); }
-    }));
-    document.getElementById('imgToPdfBtn').addEventListener('click', async () => {
-      const input = document.getElementById('imgFiles');
-      if (!input.files || input.files.length === 0) return alert('Choose images');
-      await ensurePdfLib();
-      try {
-        const doc = await PDFLib.PDFDocument.create();
-        for (const f of input.files) {
-          const bytes = new Uint8Array(await f.arrayBuffer());
-          let img;
-          if (f.type === 'image/png') { img = await doc.embedPng(bytes); }
-          else { img = await doc.embedJpg(bytes); }
-          const pw = img.width, ph = img.height;
-          const maxW = 595.28, maxH = 841.89; // A4
-          const scale = Math.min(maxW/pw, maxH/ph, 1);
-          const w = pw*scale, h = ph*scale;
-          const page = doc.addPage([maxW, maxH]);
-          page.drawImage(img, { x:(maxW - w)/2, y:(maxH - h)/2, width:w, height:h });
-        }
-        const outBytes = await doc.save();
-        currentDoc = await PDFLib.PDFDocument.load(outBytes);
-        currentBytes = outBytes; setViewer(outBytes);
-      } catch (e) { alert('Images→PDF failed: ' + e.message); }
-    });
-    document.getElementById('downloadBtn').addEventListener('click', () => requireDoc(async () => {
-      const bytes = await currentDoc.save();
-      const blob = new Blob([bytes], {type:'application/pdf'});
-      const url = URL.createObjectURL(blob);
-      const a = Object.assign(document.createElement('a'), {href: url, download: 'optipdf-output.pdf'});
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    }));
-    document.getElementById('copyEmail').addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText('parshasparksprintables@gmail.com'); alert('Email copied'); }
-      catch(e) { alert('Could not copy. Email: parshasparksprintables@gmail.com'); }
+
+    input?.addEventListener('change', (e)=>{
+      const files = Array.from(e.target.files||[]);
+      if(!files.length) return;
+      // Hook your real tool here — for now we just confirm selection
+      alert(`${files.length} file(s) selected. Viewer/merge logic coming next.`);
     });
   </script>
 </body>
