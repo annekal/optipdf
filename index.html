@@ -6,41 +6,51 @@
   <title>OptiPDF — Fast, private PDF tools</title>
   <link rel="stylesheet" href="./css/styles.css">
   <style>
-    :root{ --bg:#f3f4f6; --card:#ffffff; --border:#e5e7eb; --text:#111827; --muted:#374151; --brand:#2563eb; --brand-700:#1d4ed8; }
+    :root{
+      --bg:#f3f4f6;        /* soft gray */
+      --card:#ffffff;      /* white */
+      --border:#e5e7eb;    /* light gray */
+      --text:#111827;      /* near-black */
+      --muted:#374151;     /* dark gray */
+      --blue:#2563eb;      /* brand blue */
+      --blue-700:#1d4ed8;
+      --orange:#ff7a1a;    /* accent orange */
+    }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     img{max-width:100%;display:block}
     .container{max-width:1100px;margin:0 auto;padding:16px}
-    .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:center}
 
     /* Header */
     header{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--border)}
-    .header{display:flex;align-items:center;gap:12px}
+    .header{display:flex;align-items:center;gap:10px}
     .brand-left{display:flex;align-items:center;gap:10px}
-    .logo{height:18px}
-    .brand{font-weight:800;font-size:1.08rem}
-    .tagline{font-size:.9rem;color:#6b7280}
-    nav.nav{margin-left:auto;display:flex;gap:14px;white-space:nowrap}
+    .logo{height:20px}
+    .brand{font-weight:800;font-size:1.18rem}
+    .tagline{font-size:.88rem;color:#6b7280}
+    nav.nav{margin-left:auto;display:flex;gap:14px;align-items:center;white-space:nowrap}
     nav.nav a{color:#374151;text-decoration:none;font-weight:600}
-    nav.nav a:hover{color:var(--brand)}
-    @media (min-width:1000px){ .logo{height:20px} .brand{font-size:1.24rem} }
-    @media (max-width:560px){ header{padding:8px 12px} }
+    nav.nav a:hover{color:var(--orange)}
+    .version{color:#6b7280;font-weight:600}
+    @media (max-width:560px){ header{padding:8px 12px} .logo{height:18px} .brand{font-size:1.08rem} .version{display:none} }
 
     /* Buttons */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:12px;border:1px solid transparent;padding:12px 16px;cursor:pointer;transition:box-shadow .08s ease,transform .06s ease}
     .btn:active{transform:translateY(1px)}
-    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-    .btn-primary:hover{background:var(--brand-700)}
-    .btn-secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
-    .btn-secondary:hover{background:#eef2ff}
+    .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+    .btn-primary:hover{background:var(--blue-700)}
+    .btn-accent{background:#fff;color:var(--orange);border-color:var(--orange)}
+    .btn-accent:hover{background:#fff5ed}
 
     /* Hero */
     .hero{padding:14px 0}
     .hero-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:center}
     .hero h1{margin:0 0 6px;font-size:1.5rem;line-height:1.2}
     .hero p{margin:.25rem 0 1rem;color:var(--muted)}
-    .hero-media{display:block;max-width:100%;}
-    .hero-media video{width:100%;height:auto;max-height:360px;border-radius:14px;background:#000;border:1px solid var(--border);object-fit:cover}
+    .hero-media{display:block}
+    .video-wrap{position:relative;width:100%;max-width:520px;aspect-ratio:16/9;margin:0 auto;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#000}
+    .video-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     @media (min-width:960px){ .hero-grid{grid-template-columns:1fr 1fr} }
 
     /* Tool cards */
@@ -49,34 +59,34 @@
     .tool>summary::-webkit-details-marker{display:none}
     .tool>summary span{color:var(--muted);font-weight:600;font-size:.95rem}
     .tool .content{padding:0 16px 16px}
+
+    /* Action rows: ALWAYS two items per row on phones (buttons first) */
+    .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:center}
+    .row .wide{grid-column:1/-1}
     input[type="text"],input[type="number"],select{padding:10px 12px;border:1px solid var(--border);border-radius:10px;min-width:140px;background:#fff}
 
     /* Footer */
-    footer{margin:22px 0 40px;text-align:center;color:#6b7280}
-
-    /* Safety: hide any leaked old UI after footer */
-    footer ~ *{display:none !important}
+    footer{margin:22px 0 40px;text-align:center;color:#6b7280;font-size:.9rem}
   </style>
 </head>
 <body>
   <header>
     <div class="container header">
       <div class="brand-left">
-        <!-- TODO: if your real logo path is different, change src below -->
-        <img src="icons/icon-192.png" alt="OptiPDF logo" class="logo">
+        <!-- CHANGE src to your real logo path if different (e.g., assets/logo.png) -->
+        <img src="assets/logo.png" alt="OptiPDF logo" class="logo" onerror="this.src='icons/icon-192.png'">
         <div>
           <div class="brand">OptiPDF</div>
           <div class="tagline">Fast, private, in‑browser</div>
         </div>
       </div>
       <nav class="nav" aria-label="Primary">
-        <a href="#merge">Merge</a>
-        <a href="#split">Split</a>
-        <a href="#rotate">Rotate</a>
-        <a href="#reorder">Reorder</a>
-        <a href="#view">View</a>
-        <a href="lawyers.html">Lawyers</a>
+        <a href="index.html">Home</a>
+        <a href="lawyers.html">For Lawyers</a>
+        <a href="about.html">About</a>
         <a href="help.html">Help</a>
+        <a href="privacy.html">Privacy</a>
+        <span class="version">v4.6.1</span>
       </nav>
     </div>
   </header>
@@ -88,17 +98,21 @@
         <div class="hero-cta">
           <h1>Work with PDFs safely</h1>
           <p>Nothing is uploaded — your files never leave your device.</p>
-          <button id="openPdfBtn" class="btn btn-primary">Choose PDF</button>
-          <input type="file" id="pdfInput" accept="application/pdf" hidden>
-          <div class="tagline" style="margin-top:6px">Or pick a tool below.</div>
+          <div class="row">
+            <button id="openPdfBtn" class="btn btn-primary">Choose PDF</button>
+            <a class="btn btn-accent" href="#merge">Go to Merge</a>
+          </div>
         </div>
         <div class="hero-media">
-          <!-- Optional video; change to your file path if you have one -->
-          <video controls preload="metadata" poster="assets/cover.jpg">
-            <source src="assets/intro.mp4" type="video/mp4" />
-          </video>
+          <div class="video-wrap">
+            <!-- Optional video; change to your file path if you have one -->
+            <video controls preload="metadata" poster="assets/cover.jpg">
+              <source src="assets/intro.mp4" type="video/mp4" />
+            </video>
+          </div>
         </div>
       </div>
+      <input type="file" id="pdfInput" accept="application/pdf" hidden>
     </section>
 
     <!-- MERGE -->
@@ -106,7 +120,7 @@
       <summary>Merge PDFs <span>Combine multiple files</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="merge" data-multiple="true">Select PDFs</button>
+          <button class="btn btn-accent pick" data-tool="merge" data-multiple="true">Select PDFs</button>
           <button class="btn btn-primary run" data-tool="merge" disabled>Merge (stub)</button>
         </div>
       </div>
@@ -117,9 +131,9 @@
       <summary>Split PDF <span>Cut into ranges</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="split">Choose PDF</button>
-          <input type="text" id="ranges" placeholder="Ranges e.g. 1-3,5,7-9">
+          <button class="btn btn-accent pick" data-tool="split">Choose PDF</button>
           <button class="btn btn-primary run" data-tool="split" disabled>Split (stub)</button>
+          <input class="wide" type="text" id="ranges" placeholder="Ranges e.g. 1-3,5,7-9">
         </div>
       </div>
     </details>
@@ -129,7 +143,7 @@
       <summary>Reorder pages <span>Drag to rearrange</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="reorder">Choose PDF</button>
+          <button class="btn btn-accent pick" data-tool="reorder">Choose PDF</button>
           <button class="btn btn-primary run" data-tool="reorder" disabled>Open Reorder (stub)</button>
         </div>
       </div>
@@ -140,8 +154,8 @@
       <summary>Rotate pages <span>90°/180°/270°</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="rotate">Choose PDF</button>
-          <select id="deg">
+          <button class="btn btn-accent pick" data-tool="rotate">Choose PDF</button>
+          <select class="wide" id="deg">
             <option value="90">90°</option>
             <option value="180">180°</option>
             <option value="270">270°</option>
@@ -156,8 +170,8 @@
       <summary>Page numbers <span>Bottom center</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="pagenum">Choose PDF</button>
-          <select id="pos">
+          <button class="btn btn-accent pick" data-tool="pagenum">Choose PDF</button>
+          <select class="wide" id="pos">
             <option value="bottom-center">Bottom-center</option>
             <option value="bottom-right">Bottom-right</option>
             <option value="top-right">Top-right</option>
@@ -172,9 +186,9 @@
       <summary>Text watermark <span>Overlay text</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="watermark">Choose PDF</button>
-          <input type="text" id="wmtext" placeholder="Watermark text">
-          <input type="number" id="opacity" min="10" max="100" value="40" style="width:110px" title="Opacity %">
+          <button class="btn btn-accent pick" data-tool="watermark">Choose PDF</button>
+          <input class="wide" type="text" id="wmtext" placeholder="Watermark text">
+          <input type="number" id="opacity" min="10" max="100" value="40" title="Opacity %">
           <button class="btn btn-primary run" data-tool="watermark" disabled>Apply (stub)</button>
         </div>
       </div>
@@ -185,10 +199,10 @@
       <summary>Metadata <span>Edit fields</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="metadata">Choose PDF</button>
-          <input type="text" id="title" placeholder="Title">
-          <input type="text" id="author" placeholder="Author">
-          <input type="text" id="subject" placeholder="Subject">
+          <button class="btn btn-accent pick" data-tool="metadata">Choose PDF</button>
+          <input class="wide" type="text" id="title" placeholder="Title">
+          <input class="wide" type="text" id="author" placeholder="Author">
+          <input class="wide" type="text" id="subject" placeholder="Subject">
           <button class="btn btn-primary run" data-tool="metadata" disabled>Save (stub)</button>
         </div>
       </div>
@@ -199,7 +213,8 @@
       <summary>View PDF <span>Preview first page</span></summary>
       <div class="content">
         <div class="row">
-          <button class="btn btn-secondary pick" data-tool="view">Choose PDF</button>
+          <button class="btn btn-accent pick" data-tool="view">Choose PDF</button>
+          <button class="btn btn-primary run" data-tool="view" disabled>Open viewer (stub)</button>
         </div>
         <div style="margin-top:10px">
           <canvas id="pdfCanvas" style="width:100%;max-width:900px;border:1px solid var(--border);border-radius:12px;background:#fff"></canvas>
@@ -210,14 +225,13 @@
   </main>
 
   <footer>
-    © 2025 OptiPDF — fast, private, in‑browser · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · v4.6.1-rebuild2
+    <div class="container" style="font-size:.88rem;color:#6b7280">© 2025 OptiPDF — Fast, private, in‑browser</div>
   </footer>
 
-  <!-- PDF.js CDN for the View tool only -->
+  <!-- PDF.js for the View tool only -->
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";</script>
 
-  <!-- Minimal JS: file picking + enable RUN + basic viewer (page 1) -->
   <script>
     const input = document.getElementById('pdfInput');
     const openBtn = document.getElementById('openPdfBtn');
@@ -226,10 +240,8 @@
 
     let currentTool = null;
 
-    // From hero button
     openBtn?.addEventListener('click', () => { currentTool = 'view'; input.multiple = false; input.click(); });
 
-    // From each tool card
     pickButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         currentTool = btn.dataset.tool;
@@ -292,14 +304,15 @@ FILE: lawyers.html
     h1{margin:.5rem 0 1rem}
     ul{margin:.4rem 0 1rem;padding-left:20px}
     li{margin:.25rem 0}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:12px;border:1px solid #2563eb;padding:10px 14px;color:#fff;background:#2563eb}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:12px;border:1px solid #ff7a1a;padding:10px 14px;color:#ff7a1a;background:#fff}
+    .btn:hover{background:#fff5ed}
   </style>
 </head>
 <body>
   <div class="container">
     <h1>OptiPDF for Lawyers</h1>
     <div class="card">
-      <p><strong>Private by default.</strong> Files never leave your device. Ideal for confidential matters.</p>
+      <p><strong>Private by default.</strong> Files never leave your device — ideal for confidential matters.</p>
       <ul>
         <li>Combine exhibits and filings quickly with <strong>Merge</strong>.</li>
         <li>Extract parts of a record with <strong>Split</strong>.</li>
@@ -316,7 +329,7 @@ FILE: lawyers.html
 
 
 <!-- =============================
-FILE: help.html
+FILE: help.html  (WITH FAQ)
 ============================== -->
 <!doctype html>
 <html lang="en">
@@ -329,8 +342,10 @@ FILE: help.html
     body{background:#f3f4f6;color:#111827}
     .container{max-width:900px;margin:0 auto;padding:16px}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:14px 0}
-    ol{margin:.4rem 0 1rem;padding-left:20px}
+    ol,ul{margin:.6rem 0 1rem;padding-left:20px}
     li{margin:.25rem 0}
+    details{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin:10px 0}
+    details>summary{font-weight:700;cursor:pointer}
   </style>
 </head>
 <body>
@@ -343,7 +358,27 @@ FILE: help.html
         <li>Pick your file(s). Everything runs in your browser.</li>
         <li>Use the tool accordions on the home page for actions.</li>
       </ol>
-      <p>Problems or ideas? Email <a href="mailto:parshasparksprintables@gmail.com?subject=OptiPDF%20Feedback">parshasparksprintables@gmail.com</a>.</p>
+      <p>Need help? Email <a href="mailto:parshasparksprintables@gmail.com?subject=OptiPDF%20Support">parshasparksprintables@gmail.com</a>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Frequently Asked Questions</h2>
+      <details open>
+        <summary>Do my PDFs get uploaded to a server?</summary>
+        <p>No. OptiPDF is a static site. All processing happens in your browser (client‑side) — files never leave your device.</p>
+      </details>
+      <details>
+        <summary>Which browsers are supported?</summary>
+        <p>Latest Chrome, Edge, Safari, and Firefox on desktop and mobile. If something doesn’t open on iPhone, try using Safari and ensure pop‑ups are allowed.</p>
+      </details>
+      <details>
+        <summary>Can I use it offline?</summary>
+        <p>Yes — download the repository as a ZIP from GitHub and open <code>index.html</code> locally. Most tools work offline.</p>
+      </details>
+      <details>
+        <summary>How do I report a bug or request a feature?</summary>
+        <p>Open an issue on <a href="https://github.com/annekal/optipdf/issues" target="_blank" rel="noopener">GitHub Issues</a> or email us.</p>
+      </details>
     </div>
   </div>
 </body>
@@ -374,7 +409,7 @@ FILE: privacy.html
       <ul>
         <li>Hosting is static via GitHub Pages.</li>
         <li>No user accounts, no tracking beacons.</li>
-        <li>If you use the email link, your email provider’s policies apply.</li>
+        <li>If you email support, your email provider’s policies apply.</li>
       </ul>
       <p>If you have confidentiality requirements, you can also download the site and run it offline.</p>
     </div>
@@ -437,7 +472,7 @@ FILE: about.html
     <h1>About OptiPDF</h1>
     <div class="card">
       <p>Lightweight tools for everyday PDF tasks — all in your browser, no uploads.</p>
-      <p class="meta">Version: v4.6.1‑rebuild2</p>
+      <p class="meta">Version: v4.6.1</p>
       <p>Roadmap & issues: <a href="https://github.com/annekal/optipdf/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
     </div>
   </div>
