@@ -122,3 +122,63 @@ p { margin: .5em 0 1em; }
 @media (max-width:560px){
   .app-header{ padding:8px 12px; }
 }
+/* --- HEADER QUICK-FIX: no HTML edits needed --- */
+
+/* make header a clean flex bar */
+header, header > .container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+}
+header {
+  position: sticky; top: 0; z-index: 10;
+  border-bottom: 1px solid #eee;
+}
+
+/* keep logo smaller than brand */
+header img, header img.logo {
+  height: 18px;                 /* phone size */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* brand text next to logo (covers many possible class names) */
+header .brand,
+header .site-title,
+header .brand-title,
+header .logo-text,
+header h1 {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 0 8px;
+  line-height: 1;
+  font-weight: 800;
+  font-size: 1.08rem;           /* phone size */
+}
+
+/* push menu to the far right and keep it in one row */
+header nav {
+  margin-left: auto;            /* moves nav to the right */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
+  flex-wrap: nowrap;            /* prevents stacking */
+}
+header nav a { display: inline-block; text-decoration: none; color: #333; }
+
+/* desktop sizes */
+@media (min-width: 1000px){
+  header img, header img.logo { height: 22px; }
+  header .brand,
+  header .site-title,
+  header .brand-title,
+  header .logo-text,
+  header h1 { font-size: 1.2rem; }
+}
+
+/* comfy padding on phones */
+@media (max-width: 560px){
+  header { padding: 8px 12px; }
+}
