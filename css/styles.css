@@ -76,3 +76,49 @@ p { margin: .5em 0 1em; }
 
 /* 8) Footer spacing */
 .footer { margin-top: 28px; }
+/* --- HEADER LAYOUT (CSS-only, no HTML changes) --- */
+.app-header .container{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;   /* keep left side together */
+  gap:12px;
+}
+
+/* Logo smaller than brand */
+.app-header img.logo{
+  height:18px;                  /* phone size */
+  display:inline-block;
+  vertical-align:middle;
+}
+
+/* Brand a touch larger & inline with logo */
+.app-header .brand{
+  display:inline-block;
+  vertical-align:middle;
+  font-weight:800;
+  font-size:1.08rem;            /* phone size */
+  line-height:1;
+  margin-left:8px;              /* space between logo & brand */
+}
+
+/* Menu stays in one horizontal row on the right */
+.app-header .nav{
+  margin-left:auto;             /* push menu to the far right */
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:nowrap;
+  white-space:nowrap;
+}
+.app-header .nav a{ display:inline-block; }
+
+/* Desktop tweaks */
+@media (min-width:1000px){
+  .app-header img.logo{ height:22px; }
+  .app-header .brand{ font-size:1.2rem; }
+}
+
+/* Optional: slightly tighter header padding on phones */
+@media (max-width:560px){
+  .app-header{ padding:8px 12px; }
+}
