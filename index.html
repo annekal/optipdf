@@ -4,68 +4,57 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OptiPDF — Fast, private PDF tools</title>
-
-  <!-- One-file, mobile-first, clean reset. No tiles; each tool lives with its action. -->
+  <link rel="stylesheet" href="./css/styles.css">
   <style>
-    :root{
-      --bg:#f3f4f6;        /* soft gray background */
-      --card:#ffffff;      /* white cards */
-      --border:#e5e7eb;    /* light border */
-      --text:#111827;      /* near-black text */
-      --muted:#374151;     /* darker gray body */
-      --brand:#2563eb;     /* accessible blue */
-      --brand-700:#1d4ed8; /* darker hover blue */
-    }
-    /* base */
+    :root{ --bg:#f3f4f6; --card:#ffffff; --border:#e5e7eb; --text:#111827; --muted:#374151; --brand:#2563eb; --brand-700:#1d4ed8; }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     img{max-width:100%;display:block}
-
     .container{max-width:1100px;margin:0 auto;padding:16px}
-    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:center}
 
-    /* header */
+    /* Header */
     header{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--border)}
     .header{display:flex;align-items:center;gap:12px}
     .brand-left{display:flex;align-items:center;gap:10px}
     .logo{height:18px}
     .brand{font-weight:800;font-size:1.08rem}
+    .tagline{font-size:.9rem;color:#6b7280}
     nav.nav{margin-left:auto;display:flex;gap:14px;white-space:nowrap}
     nav.nav a{color:#374151;text-decoration:none;font-weight:600}
     nav.nav a:hover{color:var(--brand)}
     @media (min-width:1000px){ .logo{height:20px} .brand{font-size:1.24rem} }
     @media (max-width:560px){ header{padding:8px 12px} }
 
-    /* hero */
-    .hero{padding:16px 0}
-    .hero-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:center}
-    .hero h1{margin:0 0 6px;font-size:1.5rem;line-height:1.2}
-    .hero p{margin:.25rem 0 1rem;color:var(--muted)}
+    /* Buttons */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:12px;border:1px solid transparent;padding:12px 16px;cursor:pointer;transition:box-shadow .08s ease,transform .06s ease}
     .btn:active{transform:translateY(1px)}
     .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
     .btn-primary:hover{background:var(--brand-700)}
     .btn-secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
     .btn-secondary:hover{background:#eef2ff}
-    .note{font-size:.92rem;color:var(--muted)}
-    .hero-media video{width:100%;border-radius:14px;background:#000;border:1px solid var(--border)}
-    /* side-by-side on wide screens */
+
+    /* Hero */
+    .hero{padding:14px 0}
+    .hero-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:center}
+    .hero h1{margin:0 0 6px;font-size:1.5rem;line-height:1.2}
+    .hero p{margin:.25rem 0 1rem;color:var(--muted)}
+    .hero-media{display:block;max-width:100%;}
+    .hero-media video{width:100%;height:auto;max-height:360px;border-radius:14px;background:#000;border:1px solid var(--border);object-fit:cover}
     @media (min-width:960px){ .hero-grid{grid-template-columns:1fr 1fr} }
 
-    /* tools (accordion cards) */
+    /* Tool cards */
     .tool{background:var(--card);border:1px solid var(--border);border-radius:16px;margin:14px 0;overflow:hidden}
     .tool>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:800;display:flex;align-items:center;justify-content:space-between}
     .tool>summary::-webkit-details-marker{display:none}
     .tool>summary span{color:var(--muted);font-weight:600;font-size:.95rem}
     .tool .content{padding:0 16px 16px}
-
     input[type="text"],input[type="number"],select{padding:10px 12px;border:1px solid var(--border);border-radius:10px;min-width:140px;background:#fff}
 
-    /* footer */
+    /* Footer */
     footer{margin:22px 0 40px;text-align:center;color:#6b7280}
 
-    /* safety: if old UI leaked below footer, hide it */
+    /* Safety: hide any leaked old UI after footer */
     footer ~ *{display:none !important}
   </style>
 </head>
@@ -73,9 +62,12 @@
   <header>
     <div class="container header">
       <div class="brand-left">
-        <!-- Change src to your real logo path if needed -->
+        <!-- TODO: if your real logo path is different, change src below -->
         <img src="icons/icon-192.png" alt="OptiPDF logo" class="logo">
-        <div class="brand">OptiPDF</div>
+        <div>
+          <div class="brand">OptiPDF</div>
+          <div class="tagline">Fast, private, in‑browser</div>
+        </div>
       </div>
       <nav class="nav" aria-label="Primary">
         <a href="#merge">Merge</a>
@@ -83,6 +75,8 @@
         <a href="#rotate">Rotate</a>
         <a href="#reorder">Reorder</a>
         <a href="#view">View</a>
+        <a href="lawyers.html">Lawyers</a>
+        <a href="help.html">Help</a>
       </nav>
     </div>
   </header>
@@ -92,14 +86,14 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-cta">
-          <h1>Fast, private PDF tools</h1>
-          <p>Everything runs in your browser. Nothing is uploaded.</p>
+          <h1>Work with PDFs safely</h1>
+          <p>Nothing is uploaded — your files never leave your device.</p>
           <button id="openPdfBtn" class="btn btn-primary">Choose PDF</button>
           <input type="file" id="pdfInput" accept="application/pdf" hidden>
-          <div class="note">Or pick a tool below.</div>
+          <div class="tagline" style="margin-top:6px">Or pick a tool below.</div>
         </div>
         <div class="hero-media">
-          <!-- Optional video (change path to your video if you have one) -->
+          <!-- Optional video; change to your file path if you have one -->
           <video controls preload="metadata" poster="assets/cover.jpg">
             <source src="assets/intro.mp4" type="video/mp4" />
           </video>
@@ -216,7 +210,7 @@
   </main>
 
   <footer>
-    © 2025 OptiPDF — fast, private, in‑browser.
+    © 2025 OptiPDF — fast, private, in‑browser · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · v4.6.1-rebuild2
   </footer>
 
   <!-- PDF.js CDN for the View tool only -->
@@ -245,9 +239,7 @@
     });
 
     function enableRunFor(tool){
-      document.querySelectorAll('.run[data-tool]').forEach(b => {
-        b.disabled = (b.dataset.tool !== tool);
-      });
+      document.querySelectorAll('.run[data-tool]').forEach(b => { b.disabled = (b.dataset.tool !== tool); });
       document.getElementById(tool)?.setAttribute('open','open');
     }
 
@@ -279,5 +271,175 @@
       alert(`${tool.toUpperCase()} — wiring coming next. Files stay on your device.`);
     }));
   </script>
+</body>
+</html>
+
+
+<!-- =============================
+FILE: lawyers.html
+============================== -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OptiPDF for Lawyers — Faster, safer PDF workflows</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <style>
+    body{background:#f3f4f6;color:#111827}
+    .container{max-width:900px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:14px 0}
+    h1{margin:.5rem 0 1rem}
+    ul{margin:.4rem 0 1rem;padding-left:20px}
+    li{margin:.25rem 0}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:12px;border:1px solid #2563eb;padding:10px 14px;color:#fff;background:#2563eb}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>OptiPDF for Lawyers</h1>
+    <div class="card">
+      <p><strong>Private by default.</strong> Files never leave your device. Ideal for confidential matters.</p>
+      <ul>
+        <li>Combine exhibits and filings quickly with <strong>Merge</strong>.</li>
+        <li>Extract parts of a record with <strong>Split</strong>.</li>
+        <li>Reorder, rotate, and fix orientation in seconds.</li>
+        <li>Add <strong>Bates/Page numbers</strong> bottom‑center.</li>
+        <li>Apply a <strong>text watermark</strong> (e.g., CONFIDENTIAL) with opacity.</li>
+        <li>Edit <strong>metadata</strong> (Title/Author/Subject).</li>
+      </ul>
+      <a class="btn" href="index.html#merge">Start — Merge exhibits</a>
+    </div>
+  </div>
+</body>
+</html>
+
+
+<!-- =============================
+FILE: help.html
+============================== -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Help — OptiPDF</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <style>
+    body{background:#f3f4f6;color:#111827}
+    .container{max-width:900px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:14px 0}
+    ol{margin:.4rem 0 1rem;padding-left:20px}
+    li{margin:.25rem 0}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Help</h1>
+    <div class="card">
+      <h2>How to use</h2>
+      <ol>
+        <li>Tap <em>Choose PDF</em> (or a tool’s <em>Select/Choose</em> button).</li>
+        <li>Pick your file(s). Everything runs in your browser.</li>
+        <li>Use the tool accordions on the home page for actions.</li>
+      </ol>
+      <p>Problems or ideas? Email <a href="mailto:parshasparksprintables@gmail.com?subject=OptiPDF%20Feedback">parshasparksprintables@gmail.com</a>.</p>
+    </div>
+  </div>
+</body>
+</html>
+
+
+<!-- =============================
+FILE: privacy.html
+============================== -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy — OptiPDF</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <style>
+    body{background:#f3f4f6;color:#111827}
+    .container{max-width:900px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:14px 0}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Privacy</h1>
+    <div class="card">
+      <p>OptiPDF is a client‑side web app. Your PDFs are processed in your browser; files are <strong>not</strong> uploaded to a server.</p>
+      <ul>
+        <li>Hosting is static via GitHub Pages.</li>
+        <li>No user accounts, no tracking beacons.</li>
+        <li>If you use the email link, your email provider’s policies apply.</li>
+      </ul>
+      <p>If you have confidentiality requirements, you can also download the site and run it offline.</p>
+    </div>
+  </div>
+</body>
+</html>
+
+
+<!-- =============================
+FILE: terms.html
+============================== -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terms — OptiPDF</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <style>
+    body{background:#f3f4f6;color:#111827}
+    .container{max-width:900px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:14px 0}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Terms</h1>
+    <div class="card">
+      <p>OptiPDF is provided "as is" with no warranties. You are responsible for verifying the outputs meet your needs.</p>
+      <ul>
+        <li>No liability for data loss or damages.</li>
+        <li>Do not use the app for unlawful purposes.</li>
+        <li>By using the app, you agree to these terms.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+
+
+<!-- =============================
+FILE: about.html
+============================== -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — OptiPDF</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <style>
+    body{background:#f3f4f6;color:#111827}
+    .container{max-width:900px;margin:0 auto;padding:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:14px 0}
+    .meta{color:#6b7280}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>About OptiPDF</h1>
+    <div class="card">
+      <p>Lightweight tools for everyday PDF tasks — all in your browser, no uploads.</p>
+      <p class="meta">Version: v4.6.1‑rebuild2</p>
+      <p>Roadmap & issues: <a href="https://github.com/annekal/optipdf/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+    </div>
+  </div>
 </body>
 </html>
