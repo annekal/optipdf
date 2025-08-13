@@ -182,3 +182,61 @@ header nav a { display: inline-block; text-decoration: none; color: #333; }
 @media (max-width: 560px){
   header { padding: 8px 12px; }
 }
+/* ==== HEADER OVERRIDE (guaranteed) ==== */
+/* Make header a single flex row */
+header, header > .container, header > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+/* Keep logo smaller than brand */
+header img, header img.logo {
+  height: 16px !important;      /* <- tweak this number if you want */
+  max-height: 16px !important;
+  width: auto !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* Brand text right next to logo, a bit larger */
+header .brand,
+header .site-title,
+header .brand-title,
+header .logo-text,
+header h1 {
+  margin: 0 0 0 8px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  font-size: 1.20rem !important; /* <- tweak bigger/smaller if you want */
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* Push the menu to the far right and keep it in one horizontal row */
+header nav, header .nav {
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;  /* no stacking */
+}
+header nav a, header .nav a {
+  display: inline-block !important;
+  text-decoration: none !important;
+  color: #333 !important;
+}
+
+/* Phone/desktop sizes */
+@media (min-width: 1000px){
+  header img, header img.logo { height: 20px !important; max-height: 20px !important; }
+  header .brand,
+  header .site-title,
+  header .brand-title,
+  header .logo-text,
+  header h1 { font-size: 1.28rem !important; }
+}
+@media (max-width: 560px){
+  header { padding: 8px 12px !important; }
+}
