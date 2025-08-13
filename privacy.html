@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OptiPDF — Privacy</title>
+  <link rel="icon" href="icons/icon-192.png" />
+  <style>
+:root {
+  --bg: #0e1220; --card: #11172c; --text: #f7fafc; --muted: #b8c2e0; --line: #293255;
+  --accent: #f59e0b; --accent-soft: rgba(245, 158, 11, 0.14);
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans'; color: var(--text);
+  background: radial-gradient(1200px 600px at 70% -10%, #1a2242 0%, var(--bg) 50%), var(--bg); }
+a { color: #ffd08a; }
+header { display:flex; align-items:center; justify-content:space-between; padding: 14px 20px; max-width: 1200px; margin: 0 auto; }
+.brand { display:flex; gap:12px; align-items:center; text-decoration:none; color:inherit; }
+.brand img { width:150px; height:auto; }
+.brand .name { display:flex; flex-direction:column; line-height:1.0; }
+.brand .name strong { font-size: 26px; }
+.brand .name span { font-size:12px; color: var(--muted); }
+.navlinks { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.pill { font-size:12px; padding:6px 10px; border:1px solid var(--line); border-radius:999px; color: var(--muted); text-decoration:none; background:transparent; }
+main { max-width:1200px; margin:28px auto; padding: 0 20px; }
+.hero { display:grid; gap: 24px; grid-template-columns: 1.2fr 1fr; align-items:flex-start; }
+.card { background: linear-gradient(180deg, var(--card), #0b1226); border: 1px solid var(--line); border-radius: 18px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+h1 { font-size: clamp(24px, 3.2vw, 36px); margin:0 0 10px; line-height:1.15; }
+p { color: var(--muted); margin: 0 0 8px; }
+.cta { display:flex; gap:12px; flex-wrap: wrap; margin-top: 14px; }
+.btn { padding: 10px 14px; border-radius: 10px; border:1px solid var(--line); background: #151c3a; color: var(--text); text-decoration:none; font-weight:600; cursor:pointer; }
+.btn.primary { border-color: #ad6a07; background: linear-gradient(180deg, #2b1c08, #1a1309); color:#ffd79a; }
+.btn.ghost { background: transparent; }
+.grid { margin-top: 18px; display:grid; gap:12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tile { padding:16px; border-radius:14px; border:1px solid var(--line); background:#0f1736; position:relative; }
+.tile:before { content:''; position:absolute; inset:auto auto 0 0; height:3px; width: 90px; background: var(--accent); border-radius:3px; opacity:.8; }
+.tile strong { color: #ffd08a; }
+.tools { margin-top:22px; display:grid; gap:14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.toolcard { padding:16px; border-radius:14px; border:1px solid var(--line); background:#101735; }
+label { display:block; margin:8px 0 4px; color: var(--muted); font-size: 13px; }
+input[type="text"], input[type="number"], input[type="file"], textarea, select {
+  width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:#0b1126; color:var(--text);
+}
+.viewer { width:100%; height: 520px; border:1px solid var(--line); border-radius: 12px; background:#0b1126; }
+small.hint { color:#9fb0d8; display:block; margin-top:6px; font-size:12px; }
+footer { max-width:1200px; margin:26px auto; padding: 0 20px 34px; color: var(--muted); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.footer-right { display:flex; gap:10px; flex-wrap:wrap; }
+.meta-line { padding:6px 10px; border-radius:999px; border:1px dashed var(--line); background: var(--accent-soft); color:#ffd08a; font-size:12px; }
+.yt { position: relative; width: 100%; padding-top: 56.25%; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:#0b1126; }
+.yt iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
+@media (max-width: 1000px) { .hero { grid-template-columns: 1fr; } .tools { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="Your Logo" onerror="this.src='icons/icon-192.png'">
+      <div class="name">
+        <strong>OptiPDF</strong>
+        <span>Fast • Private • Free</span>
+      </div>
+    </a>
+    <div class="navlinks">
+      <a class="pill" href="index.html">Home</a>
+      <a class="pill" href="lawyers.html">For Lawyers</a>
+      <a class="pill" href="about.html">About / Help</a>
+      <a class="pill" href="privacy.html">Privacy</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h1>Privacy Overview</h1>
+      <p>OptiPDF is designed for privacy. Core tools run fully in your browser; documents are not uploaded to a server.</p>
+    </section>
+
+    <section class="card">
+      <h2>What data we process</h2>
+      <ul>
+        <li><strong>Your documents:</strong> processed locally in your browser’s memory.</li>
+        <li><strong>Contact:</strong> if you email us, we receive your address and message.</li>
+        <li><strong>Leads (optional):</strong> if you submit a form in the future, we’ll only store the fields you provide.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Analytics & cookies</h2>
+      <p>No third‑party analytics or tracking cookies. If we add basic, privacy‑friendly metrics later, we’ll update this page first.</p>
+    </section>
+
+    <section class="card">
+      <h2>Data retention</h2>
+      <p>We keep emails or form submissions only as long as needed to respond and maintain a lightweight mailing list (opt‑out anytime).</p>
+    </section>
+
+    <section class="card">
+      <h2>Legal workflows</h2>
+      <p>OptiPDF is a utility, not legal advice. Always verify outputs before filing or sharing.</p>
+    </section>
+
+    <section class="card">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:parshasparksprintables@gmail.com">parshasparksprintables@gmail.com</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <div>© <span id="year"></span> OptiPDF. All rights reserved.</div>
+    <div class="footer-right"><span class="meta-line">Metadata editable • No uploads</span></div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
